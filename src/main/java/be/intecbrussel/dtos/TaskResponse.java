@@ -8,7 +8,7 @@ import java.time.LocalTime;
 
 @Getter
 @AllArgsConstructor
-public class UpdateTaskRequest {
+public class TaskResponse {
 
     private Long id;
     private LocalDate startDate;
