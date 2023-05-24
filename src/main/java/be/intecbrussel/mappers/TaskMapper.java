@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TaskMapper {
 
     Task toEntity(CreateNewTaskRequest req);

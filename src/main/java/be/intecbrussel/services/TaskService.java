@@ -83,12 +83,6 @@ public class TaskService {
 
         List<Task> tasks = this.taskRepository.findAll();
 
-        Task task = new Task();
-        task.setId(33L);
-        task.setTitle("new Task 1");
-        task.setDescription("Description of a test tasks");
-        tasks.add(task);
-
         return ResponseEntity.ok(this.taskMapper.toDto(tasks));
     }
 
