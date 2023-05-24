@@ -6,17 +6,24 @@ import be.intecbrussel.dtos.UpdateTaskRequest;
 import be.intecbrussel.services.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 import java.util.List;
 
 
 @RestController
 @RequestMapping(path = "/tasks")
+@Validated
+@Tag(name = "Task", description = "Manage tasks")
 public class TaskController {
 
     private final TaskService taskService;
@@ -31,6 +38,7 @@ public class TaskController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskResponse> createTask(
             @RequestBody
+            @NotNull
             @Parameter(required = true, description = "new task info") CreateNewTaskRequest req) {
 
         return this.taskService.createTask(req);
@@ -42,6 +50,7 @@ public class TaskController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskResponse> updateTask(
             @RequestBody
+            @NotNull
             @Parameter(required = true, description = "task update info") UpdateTaskRequest req) {
 
         return this.taskService.updateTask(req);
@@ -51,7 +60,9 @@ public class TaskController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteTask(
             @PathVariable
-            @Parameter(required = true, description = "task id value", example = "1") Long id) {
+            @NotBlank
+            @PositiveOrZero
+            @Parameter(required = true, description = "task id value positive number", example = "1") Long id) {
 
         return this.taskService.deleteTask(id);
     }
@@ -60,7 +71,9 @@ public class TaskController {
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskResponse> findTask(
             @PathVariable
-            @Parameter(required = true, description = "task id value", example = "1") Long id) {
+            @NotBlank
+            @PositiveOrZero
+            @Parameter(required = true, description = "task id value positive number", example = "1") Long id) {
 
         return this.taskService.findTask(id);
     }
@@ -69,6 +82,7 @@ public class TaskController {
     @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TaskResponse>> findAllTasks(
             @RequestParam(name = "date")
+            @NotBlank
             @Parameter(required = true, description = "day when task is active", example = "22/07/2022")
             @DateTimeFormat(pattern = "dd/MM/yyyy")
             LocalDate date) {
