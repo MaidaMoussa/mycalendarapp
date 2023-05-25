@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
@@ -60,7 +59,7 @@ public class TaskController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteTask(
             @PathVariable
-            @NotBlank
+            @NotNull
             @PositiveOrZero
             @Parameter(required = true, description = "task id value positive number", example = "1") Long id) {
 
@@ -71,7 +70,7 @@ public class TaskController {
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskResponse> findTask(
             @PathVariable
-            @NotBlank
+            @NotNull
             @PositiveOrZero
             @Parameter(required = true, description = "task id value positive number", example = "1") Long id) {
 
@@ -82,7 +81,7 @@ public class TaskController {
     @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TaskResponse>> findAllTasks(
             @RequestParam(name = "date")
-            @NotBlank
+            @NotNull
             @Parameter(required = true, description = "day when task is active", example = "22/07/2022")
             @DateTimeFormat(pattern = "dd/MM/yyyy")
             LocalDate date) {

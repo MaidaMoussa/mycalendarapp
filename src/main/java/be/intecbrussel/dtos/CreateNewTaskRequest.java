@@ -20,9 +20,9 @@ public class CreateNewTaskRequest {
     @Schema(type = "string", pattern = "dd/MM/yyyy", example = "24/10/2022")
     private LocalDate endDate;
 
-    @Schema(type = "string", pattern = "HH:mm",example = "19:30")
+    @Schema(type = "string", pattern = "HH:mm", example = "19:30")
     private LocalTime startTime;
-    @Schema(type = "string", pattern = "HH:mm",example = "19:30")
+    @Schema(type = "string", pattern = "HH:mm", example = "19:30")
     private LocalTime endTime;
 
     @Schema(type = "string", description = "short description of a task")

@@ -1,5 +1,6 @@
 package be.intecbrussel.services;
 
+import be.intecbrussel.Exceptions.TaskNotFoundException;
 import be.intecbrussel.dtos.CreateNewTaskRequest;
 import be.intecbrussel.dtos.TaskResponse;
 import be.intecbrussel.dtos.UpdateTaskRequest;
@@ -39,7 +40,7 @@ public class TaskService {
         Optional<Task> foundTask = this.taskRepository.findById(id);
 
         if (!foundTask.isPresent()) {
-
+            throw new TaskNotFoundException("The Task with id : " + id + " does not exist");
         }
 
         this.taskRepository.deleteById(id);
@@ -52,7 +53,7 @@ public class TaskService {
         Optional<Task> foundTask = this.taskRepository.findById(req.getId());
 
         if (!foundTask.isPresent()) {
-
+            throw new TaskNotFoundException("The Task with id : " + req.getId() + " does not exist");
         }
 
         Task updatedTask = this.taskRepository.save(this.taskMapper.toEntity(req));
@@ -66,7 +67,7 @@ public class TaskService {
         Optional<Task> foundTask = this.taskRepository.findById(id);
 
         if (!foundTask.isPresent()) {
-
+            throw new TaskNotFoundException("The Task with id : " + id + " does not exist");
         }
 
         return ResponseEntity.ok(this.taskMapper.toDto(foundTask.get()));
