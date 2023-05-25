@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
@@ -38,7 +39,8 @@ public class TaskController {
     public ResponseEntity<TaskResponse> createTask(
             @RequestBody
             @NotNull
-            @Parameter(required = true, description = "new task info") CreateNewTaskRequest req) {
+            @Parameter(required = true, description = "new task info")
+            @Valid CreateNewTaskRequest req) {
 
         return this.taskService.createTask(req);
     }
@@ -50,7 +52,8 @@ public class TaskController {
     public ResponseEntity<TaskResponse> updateTask(
             @RequestBody
             @NotNull
-            @Parameter(required = true, description = "task update info") UpdateTaskRequest req) {
+            @Parameter(required = true, description = "task update info")
+            @Valid UpdateTaskRequest req) {
 
         return this.taskService.updateTask(req);
     }
@@ -61,7 +64,8 @@ public class TaskController {
             @PathVariable
             @NotNull
             @PositiveOrZero
-            @Parameter(required = true, description = "task id value positive number", example = "1") Long id) {
+            @Parameter(required = true, description = "task id value positive number", example = "1")
+            @Valid Long id) {
 
         return this.taskService.deleteTask(id);
     }
@@ -72,7 +76,8 @@ public class TaskController {
             @PathVariable
             @NotNull
             @PositiveOrZero
-            @Parameter(required = true, description = "task id value positive number", example = "1") Long id) {
+            @Parameter(required = true, description = "task id value positive number", example = "1")
+            @Valid Long id) {
 
         return this.taskService.findTask(id);
     }
@@ -84,7 +89,7 @@ public class TaskController {
             @NotNull
             @Parameter(required = true, description = "day when task is active", example = "22/07/2022")
             @DateTimeFormat(pattern = "dd/MM/yyyy")
-            LocalDate date) {
+            @Valid LocalDate date) {
 
         return this.taskService.findAllTasks(date);
     }

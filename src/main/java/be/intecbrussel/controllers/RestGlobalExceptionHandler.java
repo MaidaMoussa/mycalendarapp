@@ -47,11 +47,23 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
+    @ExceptionHandler(value = {NumberFormatException.class})
+    protected ResponseEntity<Object> handleNumericFormatError(Exception ex, WebRequest request) {
+        String type = "https://localhost/errors/failed-validation";
+        String title = "The ressource failed validation";
+        String status = "400";
+        String detail = ex.getMessage();
+        String instance = request.getDescription(false).substring(4);
+
+        ErrorResponse errorResponse = new ErrorResponse(type, title, status, detail, instance);
+
+        return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         String type = "https://localhost/errors/failed-validation";
-        String title = "The ressource failed validation ";
+        String title = "The ressource failed validation";
         String statusCode = "400";
         String detail = ex.getRootCause() != null ? ex.getRootCause().getMessage() : ex.getMessage(); //ex.getMessage();
         String instance = request.getDescription(false).substring(4);
