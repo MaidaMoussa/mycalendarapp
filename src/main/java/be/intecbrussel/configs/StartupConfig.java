@@ -36,8 +36,8 @@ public class StartupConfig implements CommandLineRunner {
         Task task2 = new Task();
         task2.setTitle("Title task 2");
         task2.setDescription("Description task 2");
-        task2.setStartDate(LocalDate.now().minusMonths(1L));
-        task2.setEndDate(LocalDate.now().minusMonths(1L));
+        task2.setStartDate(LocalDate.now());
+        task2.setEndDate(LocalDate.now().plusDays(1L));
         task2.setStartTime(LocalTime.of(5, 30));
         task2.setEndTime(LocalTime.of(18, 30));
         tasks.add(task2);
@@ -45,10 +45,8 @@ public class StartupConfig implements CommandLineRunner {
         Task task3 = new Task();
         task3.setTitle("Title task 3");
         task3.setDescription("Description task 3");
-        task3.setStartDate(LocalDate.now().plusMonths(1L));
-        task3.setEndDate(LocalDate.now().plusMonths(1L));
-        task3.setStartTime(LocalTime.of(11, 30));
-        task3.setEndTime(LocalTime.of(17, 30));
+        task3.setStartDate(LocalDate.now().plusDays(1L));
+        task3.setFullDay(true);
         tasks.add(task3);
 
         this.taskRepository.saveAll(tasks);

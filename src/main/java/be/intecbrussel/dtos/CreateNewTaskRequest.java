@@ -34,7 +34,7 @@ public class CreateNewTaskRequest {
     @Schema(type = "string", description = "long description of a task")
     private String description;
 
-    @Schema(description = "true if the task takes the whole day")
+    @Schema(description = "true if the task takes the whole day", example = "false")
     @NotNull(message = "The indicator of full day span is mandatory")
     private boolean fullDay;
 

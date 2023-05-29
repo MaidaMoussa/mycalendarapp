@@ -37,10 +37,10 @@ public class TaskController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskResponse> createTask(
-            @RequestBody
-            @NotNull
+            @Valid @RequestBody
+            @NotNull(message = "request body of create cannot be null")
             @Parameter(required = true, description = "new task info")
-            @Valid CreateNewTaskRequest req) {
+            CreateNewTaskRequest req) {
 
         return this.taskService.createTask(req);
     }
@@ -50,10 +50,10 @@ public class TaskController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskResponse> updateTask(
-            @RequestBody
-            @NotNull
+            @Valid @RequestBody
+            @NotNull(message = "request body of update cannot be null")
             @Parameter(required = true, description = "task update info")
-            @Valid UpdateTaskRequest req) {
+            UpdateTaskRequest req) {
 
         return this.taskService.updateTask(req);
     }
@@ -62,10 +62,10 @@ public class TaskController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteTask(
             @PathVariable
-            @NotNull
-            @PositiveOrZero
+            @NotNull(message = "id cannot be null")
+            @PositiveOrZero(message = "id should be a positive integer or 0")
             @Parameter(required = true, description = "task id value positive number", example = "1")
-            @Valid Long id) {
+            Long id) {
 
         return this.taskService.deleteTask(id);
     }
@@ -73,11 +73,11 @@ public class TaskController {
     @Operation(summary = "Finds a task using its id")
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskResponse> findTask(
-            @PathVariable
-            @NotNull
-            @PositiveOrZero
+            @PathVariable(value = "id")
+            @NotNull(message = "id cannot be null")
+            @PositiveOrZero(message = "id should be positive or o")
             @Parameter(required = true, description = "task id value positive number", example = "1")
-            @Valid Long id) {
+            Long id) {
 
         return this.taskService.findTask(id);
     }
@@ -86,19 +86,19 @@ public class TaskController {
     @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TaskResponse>> findAllTasks(
             @RequestParam(name = "date")
-            @NotNull
+            @NotNull(message = "date field cannot be null")
             @Parameter(required = true, description = "day when task is active", example = "22/07/2022")
             @DateTimeFormat(pattern = "dd/MM/yyyy")
-            @Valid LocalDate date) {
+            LocalDate date) {
 
         return this.taskService.findAllTasks(date);
     }
 
     @Operation(summary = "Finds the list of all tasks")
     @GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TaskResponse>> findAllTasksTest() {
+    public ResponseEntity<List<TaskResponse>> findAllTasks() {
 
-        return this.taskService.findAllTasksTest();
+        return this.taskService.findAllTasks();
     }
 
 }

@@ -33,6 +33,6 @@ public class UpdateTaskRequest {
     @Schema(type = "string", description = "long description of a task")
     private String description;
 
-    @Schema(description = "true if the task takes the whole day")
+    @Schema(description = "true if the task takes the whole day", example = "false")
     private boolean fullDay;
 }

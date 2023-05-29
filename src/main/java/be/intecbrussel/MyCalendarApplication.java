@@ -26,7 +26,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 ))
 @SpringBootApplication
 public class MyCalendarApplication {
-
+    // Swagger-ui url : http://localhost:8888/swagger-ui/index.html
+    //           json : http://localhost:8888/v3/api-docs0
 
     public static void main(String[] args) {
         SpringApplication.run(MyCalendarApplication.class, args);

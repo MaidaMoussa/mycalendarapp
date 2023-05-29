@@ -12,6 +12,8 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-    @Query(value = "Select t from Task t where  t.startDate>= :date and t.endDate <= :date ")
+    @Query(value = "Select t from Task t " +
+            "where (:date between t.startDate and t.endDate)" +
+            "or (t.startDate=:date and t.endDate is null) ")
     List<Task> findAllByDate(@Param("date") LocalDate date);
 }
