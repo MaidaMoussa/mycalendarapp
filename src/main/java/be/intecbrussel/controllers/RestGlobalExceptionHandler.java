@@ -23,7 +23,7 @@ import java.util.List;
 @RestControllerAdvice
 public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {TaskAlreadyExistsException.class})
+    @ExceptionHandler(value = TaskAlreadyExistsException.class)
     protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest request) {
 
         String type = "https://localhost/errors/insert-conflict";
@@ -37,7 +37,7 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
-    @ExceptionHandler(value = {TaskNotFoundException.class})
+    @ExceptionHandler(value = TaskNotFoundException.class)
     protected ResponseEntity<Object> handleNotFound(Exception ex, WebRequest request) {
         String type = "https://localhost/errors/not-found";
         String title = "The resource cannot be found ";
@@ -96,7 +96,7 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, request);
     }
 
-    @ExceptionHandler(value = {ConstraintViolationException.class})
+    @ExceptionHandler(value = ConstraintViolationException.class)
     protected ResponseEntity<Object> handleURLPathErrors(ConstraintViolationException ex, WebRequest request) {
         String type = "https://localhost/errors/failed-validation";
         String title = "The resource URL failed validation";
@@ -109,7 +109,7 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
-    @ExceptionHandler(value = {TaskContentValidationException.class})
+    @ExceptionHandler(value = TaskContentValidationException.class)
     protected ResponseEntity<Object> handleTaskContentError(Exception ex, WebRequest request) {
         String type = "https://localhost/errors/failed-validation";
         String title = "The resource failed validation";
@@ -121,4 +121,18 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
+
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<Object> defaultErrorHandler(Exception ex, WebRequest request) throws Exception {
+        String type = "https://localhost/errors/unknown-error";
+        String title = "An unknown error has occurred";
+        String status = "500";
+        String detail = ex.getMessage();
+        String instance = request.getDescription(false).substring(4);
+
+        ErrorResponse errorResponse = new ErrorResponse(type, title, status, detail, instance);
+
+        return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
+
 }
