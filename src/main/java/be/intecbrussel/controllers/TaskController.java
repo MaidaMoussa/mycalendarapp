@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(path = "/tasks")
 @Validated
@@ -59,7 +60,7 @@ public class TaskController {
     }
 
     @Operation(summary = "Deletes a  task ")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id:\\d+}")
     public ResponseEntity<Void> deleteTask(
             @PathVariable
             @NotNull(message = "id cannot be null")
@@ -71,7 +72,7 @@ public class TaskController {
     }
 
     @Operation(summary = "Finds a task using its id")
-    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskResponse> findTask(
             @PathVariable(value = "id")
             @NotNull(message = "id cannot be null")

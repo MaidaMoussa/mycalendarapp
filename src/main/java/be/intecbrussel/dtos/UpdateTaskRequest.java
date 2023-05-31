@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.jackson.Jacksonized;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -17,7 +19,7 @@ public class UpdateTaskRequest {
 
     @Schema(description = "must be positive or 0")
     private Long id;
-
+    @NotNull(message = "The start date is mandatory")
     @Schema(type = "string", pattern = "dd/MM/yyyy", example = "24/10/2022")
     private LocalDate startDate;
     @Schema(type = "string", pattern = "dd/MM/yyyy", example = "24/10/2022")
@@ -28,6 +30,7 @@ public class UpdateTaskRequest {
     @Schema(type = "string", pattern = "HH:mm", example = "19:30")
     private LocalTime endTime;
 
+    @NotBlank(message = "The title must not be empty")
     @Schema(type = "string", description = "short description of a task")
     private String title;
     @Schema(type = "string", description = "long description of a task")

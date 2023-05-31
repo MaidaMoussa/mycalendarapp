@@ -1,5 +1,6 @@
 package be.intecbrussel.dtos;
 
+import be.intecbrussel.validators.ValidateTaskDates;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Jacksonized
 @Builder
+@ValidateTaskDates
 public class CreateNewTaskRequest {
 
     @Schema(type = "string", pattern = "dd/MM/yyyy", example = "24/10/2022")
