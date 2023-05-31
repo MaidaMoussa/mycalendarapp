@@ -28,7 +28,8 @@ public class TaskService {
         this.taskMapper = taskMapper;
     }
 
-    private void validateTask(CreateNewTaskRequest req) {
+
+    private void validateTask(Task req) {
 
         if (req.getStartDate() == null) {
 
@@ -73,8 +74,6 @@ public class TaskService {
     }
 
     public ResponseEntity<TaskResponse> createTask(CreateNewTaskRequest req) {
-
-        validateTask(req);
 
         Task newTask = taskMapper.toEntity(req);
 
@@ -135,8 +134,6 @@ public class TaskService {
 
 
     public ResponseEntity<TaskResponse> updateTask(UpdateTaskRequest req) {
-
-        validateTask(req);
 
         Optional<Task> foundTask = this.taskRepository.findById(req.getId());
 
