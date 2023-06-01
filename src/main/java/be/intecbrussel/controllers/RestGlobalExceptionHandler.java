@@ -3,12 +3,10 @@ package be.intecbrussel.controllers;
 import be.intecbrussel.Exceptions.TaskAlreadyExistsException;
 import be.intecbrussel.Exceptions.TaskNotFoundException;
 import be.intecbrussel.dtos.ErrorResponse;
-import be.intecbrussel.exceptions.TaskContentValidationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,9 +15,12 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -86,11 +87,11 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String instance = request.getDescription(false).substring(4);
         List<String> errors = new ArrayList<>();
 
-        ex.getBindingResult().getAllErrors()
-                .stream()
+        errors.add(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+       /*         .stream()
                 .filter(FieldError.class::isInstance)
                 .map(FieldError.class::cast)
-                .forEach(fieldError -> errors.add(fieldError.getField() + " " + fieldError.getDefaultMessage()));
+                .forEach(fieldError -> errors.add(fieldError.getField() + " " + fieldError.getDefaultMessage()));*/
 
         ErrorResponse errorResponse = new ErrorResponse(type, title, statusCode, errors.toString(), instance);
 
@@ -102,20 +103,12 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String type = "https://localhost/errors/failed-validation";
         String title = "The resource URL failed validation";
         String status = "400";
-        String detail = ex.getMessage();
-        String instance = request.getDescription(false).substring(4);
 
-        ErrorResponse errorResponse = new ErrorResponse(type, title, status, detail, instance);
+        Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
+        String detail = constraintViolations.stream()
+                .map(cv -> cv == null ? "null" : cv.getPropertyPath() + ": " + cv.getInvalidValue() + " error : " + cv.getMessage())
+                .collect(Collectors.joining(", "));
 
-        return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    }
-
-    @ExceptionHandler(value = TaskContentValidationException.class)
-    protected ResponseEntity<Object> handleTaskContentError(Exception ex, WebRequest request) {
-        String type = "https://localhost/errors/failed-validation";
-        String title = "The resource failed validation";
-        String status = "400";
-        String detail = ex.getMessage();
         String instance = request.getDescription(false).substring(4);
 
         ErrorResponse errorResponse = new ErrorResponse(type, title, status, detail, instance);
