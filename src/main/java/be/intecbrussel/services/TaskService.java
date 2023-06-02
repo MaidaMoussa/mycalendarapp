@@ -1,9 +1,9 @@
 package be.intecbrussel.services;
 
-import be.intecbrussel.Exceptions.TaskNotFoundException;
 import be.intecbrussel.dtos.CreateNewTaskRequest;
 import be.intecbrussel.dtos.TaskResponse;
 import be.intecbrussel.dtos.UpdateTaskRequest;
+import be.intecbrussel.exceptions.TaskNotFoundException;
 import be.intecbrussel.mappers.TaskMapper;
 import be.intecbrussel.models.Task;
 import be.intecbrussel.repositories.TaskRepository;
@@ -28,51 +28,6 @@ public class TaskService {
         this.taskMapper = taskMapper;
     }
 
-
-    /* private void validateTask(Task req) {
-
-         if (req.getStartDate() == null) {
-
-             throw new TaskContentValidationException("A task must always have a start date ");
-         } else if (req.getEndDate() != null) {
-
-             if (req.getStartDate().isAfter(req.getEndDate())) {
-
-                 throw new TaskContentValidationException("A task start date must be before its end date " +
-                         "given : start '" + req.getStartDate() + "' end '" + req.getEndDate() + "'");
-             } else if (req.getStartDate().isEqual(req.getEndDate())) {
-
-                 if (!req.isFullDay()) {
-
-                     if (req.getStartTime() == null || req.getEndTime() == null) {
-                         throw new TaskContentValidationException("A normal task on same day must have " +
-                                 "a start time and an end time given : start '" + req.getStartTime()
-                                 + "' end '" + req.getEndTime() + "'");
-
-                     } else if (!req.getEndTime().isAfter(req.getStartTime())) {
-                         throw new TaskContentValidationException("For same day task " +
-                                 "start time must be before end time given : start '" + req.getStartTime()
-                                 + " end '" + req.getEndTime() + "'");
-                     }
-                 }
-             } else {
-                 if (req.getStartTime() == null || req.getEndTime() == null) {
-                     throw new TaskContentValidationException("A normal task must have " +
-                             "a start time and an end time given : start '" + req.getStartTime()
-                             + "' end '" + req.getEndTime() + "'");
-                 }
-             }
-
-             if (req.isFullDay() && (req.getStartTime() != null || req.getEndTime() != null)) {
-                 throw new TaskContentValidationException("A full day task cannot have a star time or an end time ");
-             }
-
-             if (req.getTitle() == null || req.getTitle().trim().isEmpty()) {
-                 throw new TaskContentValidationException("A task title cannot be empty ");
-             }
-         }
-     }
- */
     public ResponseEntity<TaskResponse> createTask(CreateNewTaskRequest req) {
 
         Task newTask = taskMapper.toEntity(req);

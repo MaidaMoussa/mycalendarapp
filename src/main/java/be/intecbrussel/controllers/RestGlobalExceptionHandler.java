@@ -1,8 +1,8 @@
 package be.intecbrussel.controllers;
 
-import be.intecbrussel.Exceptions.TaskAlreadyExistsException;
-import be.intecbrussel.Exceptions.TaskNotFoundException;
 import be.intecbrussel.dtos.ErrorResponse;
+import be.intecbrussel.exceptions.TaskAlreadyExistsException;
+import be.intecbrussel.exceptions.TaskNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +70,10 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String type = "https://localhost/errors/failed-validation";
         String title = "The resource failed validation";
         String statusCode = "400";
-        String detail = ex.getRootCause() != null ? ex.getRootCause().getMessage() : ex.getMessage();
+
+        Throwable rootCause = ex.getRootCause();
+        String detail = rootCause != null ? rootCause.getMessage() : ex.getMessage();
+
         String instance = request.getDescription(false).substring(4);
 
         ErrorResponse errorResponse = new ErrorResponse(type, title, statusCode, detail, instance);
@@ -78,12 +81,12 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
+    @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
         String type = "https://localhost/errors/failed-validation";
         String title = "At least one of the given values failed validation";
         String statusCode = "422";
-        //String detail ="";
         String instance = request.getDescription(false).substring(4);
         List<String> errors = new ArrayList<>();
 
@@ -118,7 +121,7 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<Object> defaultErrorHandler(Exception ex, WebRequest request) throws Exception {
+    public ResponseEntity<Object> defaultErrorHandler(Exception ex, WebRequest request) {
         String type = "https://localhost/errors/unknown-error";
         String title = "An unknown error has occurred";
         String status = "500";
