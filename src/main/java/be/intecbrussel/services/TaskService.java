@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -145,11 +146,27 @@ public class TaskService {
         return tasks;
     }
 
-    public ResponseEntity<List<TaskResponse>> findAllTasks(LocalDate date) {
+    public ResponseEntity<List<TaskResponse>> findAllTasksFromDay(LocalDate date) {
 
         List<Task> foundTasks = this.taskRepository.findAllByDate(date);
 
         List<Task> tasks = this.sortTasks(foundTasks, date);
+
+        return ResponseEntity.ok(this.taskMapper.toDto(tasks));
+    }
+
+    public ResponseEntity<List<TaskResponse>> findAllTasksFromMonthOfYear(LocalDate date) {
+
+        int lastDayOfMonth = YearMonth.of(date.getYear(), date.getMonth()).lengthOfMonth();
+
+        LocalDate firstDayOfMonthOfYear = LocalDate.of(date.getYear(), date.getMonth(), 1);
+        LocalDate lastDayOfMonthOfYear = LocalDate.of(date.getYear(), date.getMonth(), lastDayOfMonth);
+
+        List<Task> foundTasks = this.taskRepository.findAllByStartDateBetween(firstDayOfMonthOfYear, lastDayOfMonthOfYear);
+
+        List<Task> tasks = foundTasks.stream()
+                .sorted(Comparator.comparing(Task::getStartDate))
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok(this.taskMapper.toDto(tasks));
     }

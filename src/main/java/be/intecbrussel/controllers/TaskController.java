@@ -83,16 +83,28 @@ public class TaskController {
         return this.taskService.findTask(id);
     }
 
-    @Operation(summary = "Finds the list of all tasks of a given day ")
-    @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TaskResponse>> findAllTasks(
+    @Operation(summary = "Finds the list of all tasks of a given day sorted by full day tasks -> continuing tasks -> starting tasks ")
+    @GetMapping(path = "/day", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TaskResponse>> findAllTasksFromDay(
             @RequestParam(name = "date")
             @NotNull(message = "date field cannot be null")
             @Parameter(required = true, description = "day when task is active", example = "22/07/2022")
             @DateTimeFormat(pattern = "dd/MM/yyyy")
             LocalDate date) {
 
-        return this.taskService.findAllTasks(date);
+        return this.taskService.findAllTasksFromDay(date);
+    }
+
+    @Operation(summary = "Finds the list of all tasks of a given month of specific year sorted by starting date")
+    @GetMapping(path = "/month-of-year", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TaskResponse>> findAllTasksFromMonthOfYear(
+            @RequestParam(name = "date")
+            @NotNull(message = "date field cannot be null")
+            @Parameter(required = true, description = "month and year when task starts ( day is ignored )", example = "01/07/2022")
+            @DateTimeFormat(pattern = "dd/MM/yyyy")
+            LocalDate date) {
+
+        return this.taskService.findAllTasksFromMonthOfYear(date);
     }
 
     @Operation(summary = "Finds the list of all tasks")

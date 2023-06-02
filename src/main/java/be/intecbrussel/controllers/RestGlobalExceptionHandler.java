@@ -87,7 +87,8 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String instance = request.getDescription(false).substring(4);
         List<String> errors = new ArrayList<>();
 
-        errors.add(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+        int lastError = ex.getBindingResult().getAllErrors().size();
+        errors.add(ex.getBindingResult().getAllErrors().get(lastError - 1).getDefaultMessage());
        /*         .stream()
                 .filter(FieldError.class::isInstance)
                 .map(FieldError.class::cast)

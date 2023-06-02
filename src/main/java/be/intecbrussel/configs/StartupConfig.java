@@ -49,6 +49,16 @@ public class StartupConfig implements CommandLineRunner {
         task3.setFullDay(true);
         tasks.add(task3);
 
+        Task task4 = new Task();
+        task4.setTitle("Title task 4");
+        task4.setDescription("Description task 4");
+        task4.setStartDate(LocalDate.now().plusMonths(1L));
+        task4.setEndDate(LocalDate.now().plusMonths(1L));
+        task4.setStartTime(LocalTime.of(5, 30));
+        task4.setEndTime(LocalTime.of(18, 30));
+        task4.setFullDay(false);
+        tasks.add(task4);
+
         this.taskRepository.saveAll(tasks);
     }
 }

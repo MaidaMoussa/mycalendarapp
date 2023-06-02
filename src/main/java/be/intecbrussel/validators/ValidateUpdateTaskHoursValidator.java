@@ -4,8 +4,12 @@ import be.intecbrussel.dtos.UpdateTaskRequest;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.time.format.DateTimeFormatter;
 
 public class ValidateUpdateTaskHoursValidator implements ConstraintValidator<ValidateTaskHours, UpdateTaskRequest> {
+
+    private static final String DATE_PATTERN = "dd/MM/yyyy";
+
     @Override
     public void initialize(ValidateTaskHours constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
@@ -28,6 +32,21 @@ public class ValidateUpdateTaskHoursValidator implements ConstraintValidator<Val
                 context.buildConstraintViolationWithTemplate("A non full day task must have a start time and an end time ")
                         .addConstraintViolation();
             }
+
+            if (req.getStartDate().isEqual(req.getEndDate())) {
+
+                if (!req.getEndTime().isAfter(req.getStartTime())) {
+                    isValid = false;
+                    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+
+                    context.buildConstraintViolationWithTemplate("For same day tasks start time must be before end time given : " +
+                                    "start date '" + req.getStartDate().format(dateTimeFormatter)
+                                    + "' start time  '" + req.getStartTime()
+                                    + "' end time '" + req.getEndTime() + "'")
+                            .addConstraintViolation();
+                }
+            }
+
         }
 
         return isValid;

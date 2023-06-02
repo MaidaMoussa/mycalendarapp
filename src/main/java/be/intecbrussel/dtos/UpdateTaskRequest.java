@@ -1,5 +1,7 @@
 package be.intecbrussel.dtos;
 
+import be.intecbrussel.validators.ValidateTaskDates;
+import be.intecbrussel.validators.ValidateTaskHours;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +13,8 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@ValidateTaskDates
+@ValidateTaskHours
 @Getter
 @AllArgsConstructor
 @Jacksonized
