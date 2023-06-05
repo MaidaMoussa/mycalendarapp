@@ -1,4 +1,4 @@
-package be.intecbrussel.Exceptions;
+package be.intecbrussel.exceptions;
 
 public class TaskNotFoundException extends RuntimeException {
     public TaskNotFoundException(String message) {
