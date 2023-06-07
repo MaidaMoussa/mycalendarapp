@@ -83,11 +83,11 @@ public class TaskService {
                     .collect(Collectors.toList());
 
             List<Task> beginDifferentDayTasks = tasksToSort.stream()
-                    .filter(task -> task.getStartDate() != date && !task.isFullDay())
+                    .filter(task -> !(task.getStartDate().isEqual(date)) && !task.isFullDay())
                     .collect(Collectors.toList());
 
             List<Task> beginSameDayTasks = tasksToSort.stream()
-                    .filter(task -> task.getStartDate() == date && !task.isFullDay())
+                    .filter(task -> task.getStartDate().isEqual(date) && !task.isFullDay())
                     .sorted(Comparator.comparing(Task::getStartTime))
                     .collect(Collectors.toList());
 
